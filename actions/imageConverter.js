@@ -1,48 +1,42 @@
 const sharp = require("sharp");
-const path = require("path");
-const fs = require("fs");
 
-const outputFolder = path.join(__dirname, "../images-output");
-
-const imgConverter = async (image, quality, extension) => {
-  const { name } = path.parse(image.filename);
-  const inputBuffer = await fs.promises.readFile(image.path);
-
-  const outputPath = path.join(outputFolder, `${name}.${extension}`);
+const imgConverter = async (buffer, quality, extension) => {
   let out;
+
   switch (extension) {
     case "jpg":
     case "jpeg":
-      out = await sharp(inputBuffer).jpeg({ quality }).toFile(outputPath);
+      out = await sharp(buffer).jpeg({ quality }).toBuffer();
       break;
 
     case "webp":
-      out = await sharp(inputBuffer).webp({ quality }).toFile(outputPath);
+      out = await sharp(buffer).webp({ quality }).toBuffer();
       break;
 
     case "png":
-      out = await sharp(inputBuffer)
-        .png({ compressionLevel: 9, palette: true, quality })
-        .toFile(outputPath);
+      out = await sharp(buffer)
+        .png({
+          compressionLevel: Math.round((100 - quality) / 10),
+          palette: true,
+          quality,
+        })
+        .toBuffer();
       break;
 
     case "avif":
-      out = await sharp(inputBuffer).avif({ quality }).toFile(outputPath);
+      out = await sharp(buffer).avif({ quality }).toBuffer();
       break;
 
     case "gif":
-      out = await sharp(inputBuffer).gif().toFile(outputPath);
+      out = await sharp(buffer).gif().toBuffer();
       break;
 
     default:
-      out = await sharp(inputBuffer).jpeg({ quality }).toFile(outputPath);
+      out = await sharp(buffer).jpeg({ quality }).toBuffer();
       break;
   }
 
-  return {
-    fileName: `${name}.${extension}`,
-    size: out.size,
-  };
+  return out;
 };
 
 module.exports = { imgConverter };

@@ -15,7 +15,7 @@ const route = Router();
  * */
 route.post(
   "/compress",
-  upload.array("images"),
+  upload.single("image"),
   ValiationParamaters,
   compressImagesCTRL
 );
@@ -28,7 +28,7 @@ route.post(
  * */
 route.post(
   "/convert",
-  upload.array("images"),
+  upload.single("image"),
   ValiationParamaters,
   convertImagesCTRL
 );

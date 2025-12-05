@@ -1,5 +1,5 @@
-const fs = require("fs");
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_API_NAME,
@@ -7,16 +7,25 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadImage = async (imagePath) => {
+const uploadImage = async (imageBuffer) => {
   try {
-    const data = await cloudinary.uploader.upload(imagePath, {
-      resource_type: "image",
-      folder: "image-converter",
-    });
+    return await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "image",
+          folder: "image-converter",
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
 
-    return data.secure_url;
+      streamifier.createReadStream(imageBuffer).pipe(uploadStream);
+    });
   } catch (error) {
     return error;
   }
 };
+
 module.exports = { uploadImage };

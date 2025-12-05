@@ -1,11 +1,12 @@
 const ValiationParamaters = (req, res, next) => {
-  const images = req.files;
+  const image = req.file.buffer;
 
-  if (!images || images.length === 0) {
-    return res.status(400).json({ message: "No images uploaded" });
+  if (!image) {
+    return res.status(400).json({ message: "No image uploaded" });
   }
 
   let data;
+  console.log("req.body ", req.body.data);
   try {
     data = JSON.parse(req.body.data);
   } catch (err) {
