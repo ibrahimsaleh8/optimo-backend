@@ -11,9 +11,11 @@ const compressImagesCTRL = asyncHandler(async (req, res) => {
     Number(data.quality) || 60,
     data.name.split(".").pop().toLowerCase()
   );
-  console.log("compressedImageBuffer ", compressedImageBuffer);
   const uploadedImage = await uploadImage(compressedImageBuffer);
-  console.log("uploadedImage ", uploadedImage);
+
+  if (uploadedImage.name == "Error") {
+    return res.status(400).json({ message: uploadedImage.message });
+  }
   return res.status(200).json({
     name: data.name,
     downloadLink: uploadedImage.secure_url,

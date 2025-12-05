@@ -6,7 +6,7 @@ const ValiationParamaters = (req, res, next) => {
   }
 
   let data;
-  console.log("req.body ", req.body.data);
+
   try {
     data = JSON.parse(req.body.data);
   } catch (err) {
