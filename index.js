@@ -30,6 +30,8 @@ app.use((err, req, res, next) => {
   });
 });
 
+module.exports = app;
+
 // app.listen(process.env.PORT, () => {
 //   console.log(`Server is Running on 5000 ${process.env.PORT}`);
 // });
