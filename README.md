@@ -53,7 +53,7 @@ Quality level: **10 → 100**
 | **Node.js**    | Backend runtime environment           |
 | **Express.js** | Web server framework                  |
 | **Sharp.js**   | Image conversion & compression engine |
-| **Multer**     | File upload handler (if used)         |
+| **Multer**     | File upload handler                   |
 | **Cors**       | Enable frontend communication         |
 
 ---
